@@ -8,7 +8,14 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Initialize services
-const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const twilioClient = process.env.TWILIO_ACCOUNT_SID ? 
+  twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN) : 
+  null;
+
+if (!twilioClient) {
+  console.log('⚠️ Twilio credentials missing - app starting in debug mode');
+}
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.json());
